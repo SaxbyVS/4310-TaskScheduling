@@ -1,10 +1,7 @@
 package File;
 import Type.*;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +21,14 @@ public class FileHandler {
 
         br.close();
         return jobList;
+    }
+
+    public static void saveResults(String filename, String data) {
+        try (FileWriter writer = new FileWriter(filename, true)) { // Append mode
+            writer.write(data + "\n");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }

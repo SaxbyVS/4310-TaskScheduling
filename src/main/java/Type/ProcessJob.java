@@ -20,6 +20,6 @@ public class ProcessJob {
 
     @Override
     public String toString() {
-        return this.title + " - Burst: "+this.burstTime + " Completion: "+this.completionTime;
+        return this.title + " ("+this.burstTime + ") Completion: "+this.completionTime;
     }
 }

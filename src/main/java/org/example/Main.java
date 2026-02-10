@@ -1,5 +1,6 @@
 package org.example;
 import java.io.IOException;
+import java.sql.SQLOutput;
 import java.util.*;
 import Algorithms.*;
 import Type.*;
@@ -15,8 +16,55 @@ public class Main {
     public static void main(String[] args) throws IOException {
 
         //CORRECTNESS TESTING
-        correctness_testing();
+//        correctness_testing();
 
+        //TRIALING
+        trial(15);
+//        JobFileGenerator.generate_job_file(5);
+    }
+
+    public static void trial(int jobCount) throws IOException {
+        System.out.println("Beginning Trials");
+        System.out.println("-----------------------------\n");
+
+        System.out.println(jobCount+ " Job Trials:");
+        int trialCount = 20;
+
+        //lists to hold avg times for each trial
+        List<Double> FCFS_times = new ArrayList<>();
+        List<Double> SJF_times = new ArrayList<>();
+        List<Double> RR2_times = new ArrayList<>();
+        List<Double> RR5_times = new ArrayList<>();
+
+        //generate new job file and run on each algorithm
+        for (int i = 0; i < trialCount; i++) {
+            System.out.println("Trial "+(i+1));
+            JobFileGenerator.generate_job_file(jobCount);
+
+            ScheduleResult fcfs_result = FCFS.schedule(FileHandler.job_file_read("data/job.txt"));
+            FCFS_times.add(fcfs_result.avgTurnaroundTime);
+            ScheduleResult sjf_result = SJF.schedule(FileHandler.job_file_read("data/job.txt"));
+            SJF_times.add(sjf_result.avgTurnaroundTime);
+            ScheduleResult rr2_result = RR.schedule(FileHandler.job_file_read("data/job.txt"), 2);
+            RR2_times.add(rr2_result.avgTurnaroundTime);
+            ScheduleResult rr5_result = RR.schedule(FileHandler.job_file_read("data/job.txt"), 5);
+            RR5_times.add(rr5_result.avgTurnaroundTime);
+        }
+
+        //calc averages and save results
+        OptionalDouble FCFS_avg = FCFS_times.stream().mapToDouble(Double::doubleValue).average();
+        OptionalDouble SJF_avg = SJF_times.stream().mapToDouble(Double::doubleValue).average();
+        OptionalDouble RR2_avg = RR2_times.stream().mapToDouble(Double::doubleValue).average();
+        OptionalDouble RR5_avg = RR5_times.stream().mapToDouble(Double::doubleValue).average();
+
+        String output_path = "data/output.txt";
+        FileHandler.saveResults(output_path, "++ " + jobCount+ " Job Trial Results ++\n");
+        FileHandler.saveResults(output_path, "FCFS avg time: "+FCFS_avg.getAsDouble());
+        FileHandler.saveResults(output_path, "SJF avg time: "+SJF_avg.getAsDouble());
+        FileHandler.saveResults(output_path, "RR2 avg time: "+RR2_avg.getAsDouble());
+        FileHandler.saveResults(output_path, "RR5 avg time: "+RR5_avg.getAsDouble()+"\n");
+
+        System.out.println("********** END OF TRIALS **********");
 
     }
 

@@ -21,9 +21,9 @@ public class ScheduleResult {
     @Override
     public String toString(){
         StringBuilder sb = new StringBuilder();
-        for (ProcessJob p : processJobs) {
-            sb.append(p.toString() + "\n");
-        }
+//        for (ProcessJob p : processJobs) {
+//            sb.append(p.toString() + "\n");
+//        }
         sb.append("Avg Turnaround Time: " +this.avgTurnaroundTime);
         return sb.toString();
     }
